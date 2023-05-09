@@ -268,20 +268,35 @@ impl CommandPalette {
         let border = term_window.get_os_border();
         let top_pixel_y = top_bar_height + padding_top + border.top.get() as f32;
 
-        let mut elements =
-            vec![
-                Element::new(&font, ElementContent::Text(format!("> {selection}_")))
-                    .colors(ElementColors {
-                        border: BorderColor::default(),
-                        bg: LinearRgba::TRANSPARENT.into(),
-                        text: term_window
-                            .config
-                            .command_palette_fg_color
-                            .to_linear()
-                            .into(),
-                    })
-                    .display(DisplayType::Block),
-            ];
+        let icon = '>';
+        let row = vec![
+            Element::new(&font, ElementContent::Text(icon.to_string()))
+                .min_width(Some(Dimension::Cells(2.))),
+            Element::new(&font, ElementContent::Text(format!("{selection}_"))),
+        ];
+        let mut elements = vec![Element::new(&font, ElementContent::Children(row))
+            .margin(BoxDimension {
+                left: Dimension::Cells(0.),
+                right: Dimension::Cells(0.),
+                top: Dimension::Cells(0.2),
+                bottom: Dimension::Cells(0.2),
+            })
+            .padding(BoxDimension {
+                left: Dimension::Cells(0.5),
+                right: Dimension::Cells(0.5),
+                top: Dimension::Cells(0.2),
+                bottom: Dimension::Cells(0.2),
+            })
+            .colors(ElementColors {
+                border: BorderColor::default(),
+                bg: LinearRgba::TRANSPARENT.into(),
+                text: term_window
+                    .config
+                    .command_palette_fg_color
+                    .to_linear()
+                    .into(),
+            })
+            .display(DisplayType::Block)];
 
         for (display_idx, command) in matches
             .matches
@@ -373,7 +388,7 @@ impl CommandPalette {
                 let separator = if term_window.config.ui_key_cap_rendering
                     == ::window::UIKeyCapRendering::AppleSymbols
                 {
-                    ""
+                    " "
                 } else {
                     "-"
                 };
@@ -429,10 +444,10 @@ impl CommandPalette {
                         text,
                     })
                     .padding(BoxDimension {
-                        left: Dimension::Cells(0.25),
-                        right: Dimension::Cells(0.25),
-                        top: Dimension::Cells(0.),
-                        bottom: Dimension::Cells(0.),
+                        left: Dimension::Cells(0.5),
+                        right: Dimension::Cells(0.5),
+                        top: Dimension::Cells(0.2),
+                        bottom: Dimension::Cells(0.2),
                     })
                     .min_width(Some(Dimension::Percent(1.)))
                     .display(DisplayType::Block),
@@ -450,6 +465,8 @@ impl CommandPalette {
             size.cols as f32 * term_window.render_metrics.cell_size.width as f32;
         let desired_pixel_width =
             desired_width as f32 * term_window.render_metrics.cell_size.width as f32;
+
+        let x_adjust = ((avail_pixel_width - padding_left) - desired_pixel_width) / 2.;
 
         let element = Element::new(&font, ElementContent::Children(elements))
             .colors(ElementColors {
@@ -507,8 +524,6 @@ impl CommandPalette {
                 },
             }))
             .min_width(Some(Dimension::Pixels(desired_pixel_width)));
-
-        let x_adjust = ((avail_pixel_width - padding_left) - desired_pixel_width) / 2.;
 
         let computed = term_window.compute_element(
             &LayoutContext {
@@ -662,9 +677,8 @@ impl Modal for CommandPalette {
             .expect("to resolve char selection font");
         let metrics = RenderMetrics::with_font_metrics(&font.metrics());
 
-        let max_rows_on_screen = ((term_window.dimensions.pixel_height * 8 / 10)
-            / metrics.cell_size.height as usize)
-            - 2;
+        let max_rows_on_screen =
+            (term_window.dimensions.pixel_height / 3) / metrics.cell_size.height as usize;
         *self.max_rows_on_screen.borrow_mut() = max_rows_on_screen;
 
         let rebuild_matches = results
