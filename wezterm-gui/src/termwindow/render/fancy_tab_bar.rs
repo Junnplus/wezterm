@@ -168,13 +168,13 @@ impl crate::TermWindow {
                         left: Dimension::Cells(0.),
                         right: Dimension::Cells(0.),
                         top: Dimension::Cells(0.2),
-                        bottom: Dimension::Cells(0.),
+                        bottom: Dimension::Cells(0.2),
                     })
                     .padding(BoxDimension {
                         left: Dimension::Cells(0.5),
                         right: Dimension::Cells(0.5),
                         top: Dimension::Cells(0.2),
-                        bottom: Dimension::Cells(0.25),
+                        bottom: Dimension::Cells(0.2),
                     })
                     .border(BoxDimension::new(Dimension::Pixels(1.)))
                     .border_corners(Some(Corners {
@@ -188,8 +188,16 @@ impl crate::TermWindow {
                             height: Dimension::Cells(0.5),
                             poly: TOP_RIGHT_ROUNDED_CORNER,
                         },
-                        bottom_left: SizedPoly::none(),
-                        bottom_right: SizedPoly::none(),
+                        bottom_left: SizedPoly {
+                            width: Dimension::Cells(0.5),
+                            height: Dimension::Cells(0.5),
+                            poly: BOTTOM_LEFT_ROUNDED_CORNER,
+                        },
+                        bottom_right: SizedPoly {
+                            width: Dimension::Cells(0.5),
+                            height: Dimension::Cells(0.5),
+                            poly: BOTTOM_RIGHT_ROUNDED_CORNER,
+                        },
                     }))
                     .colors(ElementColors {
                         border: BorderColor::new(
@@ -213,13 +221,13 @@ impl crate::TermWindow {
                         left: Dimension::Cells(0.),
                         right: Dimension::Cells(0.),
                         top: Dimension::Cells(0.2),
-                        bottom: Dimension::Cells(0.),
+                        bottom: Dimension::Cells(0.2),
                     })
                     .padding(BoxDimension {
                         left: Dimension::Cells(0.5),
                         right: Dimension::Cells(0.5),
                         top: Dimension::Cells(0.2),
-                        bottom: Dimension::Cells(0.25),
+                        bottom: Dimension::Cells(0.2),
                     })
                     .border(BoxDimension::new(Dimension::Pixels(1.)))
                     .border_corners(Some(Corners {
@@ -234,14 +242,14 @@ impl crate::TermWindow {
                             poly: TOP_RIGHT_ROUNDED_CORNER,
                         },
                         bottom_left: SizedPoly {
-                            width: Dimension::Cells(0.),
-                            height: Dimension::Cells(0.33),
-                            poly: &[],
+                            width: Dimension::Cells(0.5),
+                            height: Dimension::Cells(0.5),
+                            poly: BOTTOM_LEFT_ROUNDED_CORNER,
                         },
                         bottom_right: SizedPoly {
-                            width: Dimension::Cells(0.),
-                            height: Dimension::Cells(0.33),
-                            poly: &[],
+                            width: Dimension::Cells(0.5),
+                            height: Dimension::Cells(0.5),
+                            poly: BOTTOM_RIGHT_ROUNDED_CORNER,
                         },
                     }))
                     .colors({
